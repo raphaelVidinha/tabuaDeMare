@@ -1,3 +1,4 @@
+var fs = require('fs');
 const puppeteer = require('puppeteer');
 
 let url = 'https://www.marinha.mil.br/chm/tabuas-de-mare';
@@ -17,6 +18,14 @@ let url = 'https://www.marinha.mil.br/chm/tabuas-de-mare';
 
       return tbMare;
     })
+    var json = JSON.stringify(result, null, 2);
+    fs.writeFile("./tabuas/rj.json", json, 'utf8', function(err) {
+      if(err) {
+          console.log(err);
+      } else {
+          console.log("Arquivo criado.");
+      }
+  }); 
     console.log(result);
     await browser.close();
     
