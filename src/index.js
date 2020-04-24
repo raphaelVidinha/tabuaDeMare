@@ -1,9 +1,11 @@
-const fs = require('fs');
 const readline = require('readline').createInterface({
   input: process.stdin,
   output: process.stdout
 });
+const fs = require('fs');
 const puppeteer = require('puppeteer');
+
+const { formatedNameJson } = require('./helpers/string');
 
 //https://www.marinha.mil.br/chm/tabuas-de-mare
 readline.question(`digite a url...   `, (url_input) => {
@@ -33,13 +35,13 @@ readline.question(`digite a url...   `, (url_input) => {
         });
 
         var json = JSON.stringify(result, null, 2);
-        var cidade = result[0].cidade.replace(' ', '_').replace(' ', '_').toLowerCase();
+        var fileName = formatedNameJson(result[0].cidade);
         
-        fs.writeFile(`./tabuas/${cidade}.json`, json, 'utf8', function(err) {
+        fs.writeFile(`./tabuas/${fileName}`, json, 'utf8', function(err) {
           if(err) {
               console.log(err);
           } else {
-              console.log(`O arquivo ${cidade}.json foi criado.`);
+              console.log(`O arquivo ${fileName} foi criado.`);
           }
         }); 
 
