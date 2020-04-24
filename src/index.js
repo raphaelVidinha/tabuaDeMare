@@ -4,13 +4,13 @@ const readline = require('readline').createInterface({
 });
 const fs = require('fs');
 const puppeteer = require('puppeteer');
-
 const { formatedNameJson } = require('./helpers/string');
+const { verifyPath } = require('./helpers/path');
 
 //https://www.marinha.mil.br/chm/tabuas-de-mare
-readline.question(`digite a url...   `, (url_input) => {
+readline.question(`Adicione o nome do diretório que quer salvar o arquivo: `, (path) => {
   
-    let url = url_input;
+    let url = 'https://www.marinha.mil.br/chm/tabuas-de-mare';
     
     (async () => {
 
@@ -22,7 +22,6 @@ readline.question(`digite a url...   `, (url_input) => {
         
         const result = await page.evaluate(() => {
           const tbMare = [];
-          
           const trs = document.querySelectorAll('#block-system-main > div > div > div.view-content > div:nth-child(12) > table > tbody > tr');
           
           for (let i = 0; i < trs.length; i++) {
@@ -36,8 +35,10 @@ readline.question(`digite a url...   `, (url_input) => {
 
         var json = JSON.stringify(result, null, 2);
         var fileName = formatedNameJson(result[0].cidade);
+
+        verifyPath(path);
         
-        fs.writeFile(`./tabuas/${fileName}`, json, 'utf8', function(err) {
+        fs.writeFile(`./${path}/${fileName}`, json, 'utf8', function(err) {
           if(err) {
               console.log(err);
           } else {
